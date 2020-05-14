@@ -122,7 +122,7 @@ else
     if !File.directory? 'assets'
       Dir.mkdir 'assets'
     end
-    result = Mathematical.new.render(math)
+    result = renderer.render(math)
     tex_png_index += 1
     puts tex_png_index
     File.write("./assets/#{tex_png_index}.png", result[:data])
