@@ -21,7 +21,9 @@
 <ul>
 <li>number of hidden units</li>
 <li>number of layers</li>
-<li>learning rate ( <img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/9.png" /> )</li>
+<li>learning rate ( <div class="paragraph">
+<p>\(\alpha\)</p>
+</div> )</li>
 <li>activation function</li>
 </ul>
 
@@ -132,42 +134,70 @@
 
 <p>Let&#39;s look back at the logistic regression example with lambda, a regularization parameter (another hyperparameter you have to tune).</p>
 
-<p><img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/1.png" /></p>
+<p><div class="paragraph">
+<p>\(\) J (w,b) = \dfrac{1}{m} \sum^m&lt;em&gt;{i=1}\mathcal{L}(\hat y^{(i)}, y^{(i)})+ \dfrac{\lambda}{2m}||w||&lt;/em&gt;2^2\(\)</p>
+</div></p>
 
-<p><img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/2.png" /></p>
+<p><div class="paragraph">
+<p>\(\)||w||&lt;em&gt;2^2 = \sum<sup>{n&lt;/em&gt;x}&lt;em&gt;{j=1}w&lt;/em&gt;j</sup>2= w^Tw\(\)</p>
+</div></p>
 
-<p>This is called L2-regularization. You can also add a regularization term for <img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/10.png" /> is just one parameter. L2-regularization is the most common type of regularization.</p>
+<p>This is called L2-regularization. You can also add a regularization term for <div class="paragraph">
+<p>\(b\), but \(b\)</p>
+</div> is just one parameter. L2-regularization is the most common type of regularization.</p>
 
 <p>L1-regularization is where you just add a term:</p>
 
-<p><img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/3.png" /> (could also be 2 in the denominator)</p>
+<p><div class="paragraph">
+<p>\(\) \dfrac{\lambda}{m}||w||_1\(\)</p>
+</div> (could also be 2 in the denominator)</p>
 
 <h4>In a neural network</h4>
 
-<p><img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/4.png" /></p>
+<p><div class="paragraph">
+<p>\(\) J (w<sup>{[1]},b</sup>{[1]},&#8230;&#8203;,w<sup>{[L]},b</sup>{[L]}) = \dfrac{1}{m} \sum^m&lt;em&gt;{i=1}\mathcal{L}(\hat y^{(i)}, y^{(i)})+ \dfrac{\lambda}{2m}\sum<sup>L&lt;/em&gt;{l=1}||w</sup>{[l]}||^2\(\)</p>
+</div></p>
 
-<p><img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/5.png" /></p>
+<p><div class="paragraph">
+<p>\(\)||w<sup>{[l]}||</sup>2 = \sum<sup>{n</sup>{[l-1]}}&lt;em&gt;{i=1} \sum<sup>{n</sup>{[l]}}&lt;/em&gt;{j=1} (w_{ij}<sup>{[l]})</sup>2\(\)</p>
+</div></p>
 
-<p>this matrix norm is called the &quot;Frobenius norm&quot;, also referred to as <img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/11.png" /></p>
+<p>this matrix norm is called the &quot;Frobenius norm&quot;, also referred to as <div class="paragraph">
+<p>\(||w^{[l}||^2 _F\)]</p>
+</div></p>
 
 <p>How does backpropagation change now?
-Whichever expression you have from the backpropagation, and add <img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/12.png" />.
+Whichever expression you have from the backpropagation, and add <div class="paragraph">
+<p>\(\dfrac{\lambda}{m} w^{[l}\)]</p>
+</div>.
 So,</p>
 
-<p><img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/6.png" /> </p>
+<p><div class="paragraph">
+<p>\(\)dw^{[l]} = \text{[backpropagation derivatives] }+ \(\dfrac{\lambda}{m} w^{[l}\)]$</p>
+</div> </p>
 
-<p>Afterwards, <img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/13.png" /></p>
+<p>Afterwards, <div class="paragraph">
+<p>\(w^{[l}\)] is updated again as \(w^{[l}:= w^{[l]} - \alpha dw^{[l]} \)]</p>
+</div></p>
 
 <p>L2-regularization is called weight decay, because regularization will make your load smaller:</p>
 
-<p><img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/7.png" /></p>
+<p><div class="paragraph">
+<p>\(\)w^{[l]}:= w^{[l]} - \alpha \bigr( \text{[backpropagation derivatives] }+ \dfrac{\lambda}{m} w^{[l]}\bigr)\(\)</p>
+</div></p>
 
-<p><img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/8.png" /></p>
+<p><div class="paragraph">
+<p>\(\)w^{[l]}:= w^{[l]} - \dfrac{\alpha\lambda}{m}w^{[l]} - \alpha \text{[backpropagation derivatives]}\(\)</p>
+</div></p>
 
-<p>hence your weights will become smaller by a factor <img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/14.png" />.</p>
+<p>hence your weights will become smaller by a factor <div class="paragraph">
+<p>\(\bigr(1- \dfrac{\alpha\lambda}{m}\bigr)\)</p>
+</div>.</p>
 
 <p>Intuition for regularization: the weight matrices will be penalized from being too large. Actually, the network will be forced to almost be simplified.
-Also: e.g., <em>tanh</em> function, if <img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/15.png" /> small, the activation function will be mostly operating in the linear region and not &quot;explode&quot; as easily.</p>
+Also: e.g., <em>tanh</em> function, if <div class="paragraph">
+<p>\(w\)</p>
+</div> small, the activation function will be mostly operating in the linear region and not &quot;explode&quot; as easily.</p>
 
 <h2>Dropout Regularization</h2>
 

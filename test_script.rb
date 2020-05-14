@@ -3,6 +3,7 @@ require 'byebug'
 require 'rest-client'
 require 'json'
 require 'mathematical'
+require 'asciidoctor-latex'
 
 if ARGV.length < 3
   puts "Too few arguments"
@@ -95,7 +96,7 @@ else
   }
   
   new_readme = markdown.render(old_readme)
-  renderer = Mathematical.new({format: :png})
+  renderer = Mathematical.new({format: :mathml})
   tex_png_index = 0
   # latex_array = new_readme.scan(/\$.+\$/)
   new_readme.gsub!(/\$\$.+\$\$/) {|math|
@@ -115,7 +116,7 @@ else
       puts result[:data]
       puts ''
     end
-    "<img src=\"#{remote}/master/assets/#{tex_png_index}.png\" />"
+    result[:data]
   }
 
   new_readme.gsub!(/\$.+\$/) {|math| 
@@ -135,7 +136,8 @@ else
       puts result[:data]
       puts ''
     end
-    "<img src=\"#{remote}/master/assets/#{tex_png_index}.png\" />"
+    result[:data]
+    # "<img src=\"#{remote}/master/assets/#{tex_png_index}.png\" />"
   }
 
   git_add
