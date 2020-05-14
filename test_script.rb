@@ -125,7 +125,7 @@ else
     result = Mathematical.new.render(math)
     tex_png_index += 1
     puts tex_png_index
-    File.write("./assets/#{math}.png", result[:data])
+    File.write("./assets/#{tex_png_index}.png", result[:data])
     if !!result[:exception]
       puts ''
       puts ''
@@ -141,7 +141,7 @@ else
   git_add
   git_commit
   git_push
-  
+
   File.write('./README.html', new_readme)
   byebug
   url = "https://learning.flatironschool.com/api/v1/courses/#{COURSE}/pages"
