@@ -1,0 +1,196 @@
+<h1>Tuning Neural Networks with Regularization</h1>
+
+<h2>Introduction</h2>
+
+<p>Now that you&#39;ve learned about neural networks and some streamlined methods for building such models, it&#39;s time to further explore how to tune and optimize the performance of these networks. One important aspect is reducing the time and resources needed to train these models. In previous lessons, when importing the Santa images, you immediately reduced each image to an extremely pixelated 64x64 representation. On top of that, you further down-sampled the dataset to reduce the number of observations. This was because training neural networks is resource intensive and is often a time consuming process as a result. Typically you also want to improve the accuracy and performance of these models. In this lesson, you will begin to examine various techniques related to these goals, beginning with the discussion of validation sets.</p>
+
+<h2>Objectives</h2>
+
+<p>You will be able to: </p>
+
+<ul>
+<li>Explain the relationship between bias and variance in neural networks<br></li>
+<li>Explain how regularization affects the nodes of a neural network </li>
+<li>Explain L1, L2, and dropout regularization in a neural network </li>
+</ul>
+
+<h2>Hyperparameters and iterative deep learning</h2>
+
+<p>First, there are many hyperparameters you can tune. These include: </p>
+
+<ul>
+<li>number of hidden units</li>
+<li>number of layers</li>
+<li>learning rate ( <img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/9.png" /> )</li>
+<li>activation function</li>
+</ul>
+
+<p>The question then becomes, how do you choose these parameters? One primary method is to develop validation sets to strike a balance between specificity and generalization. </p>
+
+<h2>Training, Validation, and Test Sets</h2>
+
+<p>When tuning neural networks it typically helps to split the data into three distinct partitions as follows:
+- You train algorithms on the training set
+- You&#39;ll use a validation set to decide which one will be your final model after parameter tuning
+- After having chosen the final model (and having evaluated long enough), you&#39;ll use the test set to get an unbiased estimate of the classification performance (or whatever your evaluation metric will be)  </p>
+
+<p>Remeber that it is <strong>VERY IMPORTANT</strong> to make sure that the holdout (validation) and test samples come from the same distribution: eg. same resolution of Santa pictures. </p>
+
+<h2>Bias and Variance in Deep Learning</h2>
+
+<p>Finding a balance between generalization and specificity is at the heart of the bias-variance trade off. To further examine this process for tuning neural networks, let&#39;s return to a simple example you&#39;ve seen before. </p>
+
+<h3>The Circles Example</h3>
+
+<p>In classical machine learning, you often need to consider &quot;bias-variance trade-off&quot;. You&#39;ll investigate these concepts here, and see how deep learning is slightly different and a trade-off isn&#39;t always present!</p>
+
+<ul>
+<li><p>Bias = underfitting</p></li>
+<li><p>High variance = overfitting</p></li>
+<li><p>Good fit --&gt; somewhere in between </p></li>
+</ul>
+
+<p>To start, take another look at the two circles data, the data looked like this: </p>
+
+<p><img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/images/example.png" alt="title"> </p>
+
+<p>Recall that you fit a logistic regression model to the data here. You got something that looked like the picture below. The model didn&#39;t do a particularly good job at discriminating between the yellow and purple dots. You could say this is a model with a <strong>high bias</strong>, the model is <strong>underfitting</strong>. </p>
+
+<p><img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/images/underfitting.png" alt="title"> </p>
+
+<p>When using a neural network, what you reached in the end was a pretty good decision boundary, a circle discriminating between the yellow and purple dots: </p>
+
+<p><img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/images/good.png" alt="title"> </p>
+
+<p>At the other end of the spectrum, you might experience <strong>overfitting</strong>, where you create a circle which is super sensitive to small deviations of the colored dots, like the example below. You can also call this a model with <strong>high variance</strong>. </p>
+
+<p><img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/images/overfitting.png" alt="title">  </p>
+
+<h2>The Santa Example</h2>
+
+<p><tr>
+<td> <img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/images/S_4.jpg"alt="Drawing" style="height: 220px;"/> </td>
+<td> <img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/images/NS_1.jpg"alt="Drawing" style="height: 220px;"/> </td>
+</tr> </p>
+
+<table><thead>
+<tr>
+<th></th>
+<th>High variance</th>
+<th>High bias</th>
+<th>High variance &amp; bias</th>
+<th>Low variance and bias</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>train set error</td>
+<td>12%</td>
+<td>26%</td>
+<td>26%</td>
+<td>12%</td>
+</tr>
+<tr>
+<td>validation set error</td>
+<td>25%</td>
+<td>28%</td>
+<td>40%</td>
+<td>13%</td>
+</tr>
+</tbody></table>
+
+<p>Assume that our best model can get to a validation set accuracy of 87%. Note that &quot;high&quot; and &quot;low&quot; are relative! Also, in deep learning there is less of a bias variance trade-off! </p>
+
+<h2>Rules of Thumb Regarding Bias / Variance</h2>
+
+<table><thead>
+<tr>
+<th>High Bias? (training performance)</th>
+<th>High variance? (validation performance)</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Use a bigger network</td>
+<td>More data</td>
+</tr>
+<tr>
+<td>Train longer</td>
+<td>Regularization</td>
+</tr>
+<tr>
+<td>Look for other existing NN architextures</td>
+<td>Look for other existing NN architextures</td>
+</tr>
+</tbody></table>
+
+<h2>Regularization</h2>
+
+<p>Use regularization when the model overfits to the data. </p>
+
+<h3>L1 and L2 regularization</h3>
+
+<h4>In logistic regression</h4>
+
+<p>Let&#39;s look back at the logistic regression example with lambda, a regularization parameter (another hyperparameter you have to tune).</p>
+
+<p><img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/1.png" /></p>
+
+<p><img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/2.png" /></p>
+
+<p>This is called L2-regularization. You can also add a regularization term for <img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/10.png" /> is just one parameter. L2-regularization is the most common type of regularization.</p>
+
+<p>L1-regularization is where you just add a term:</p>
+
+<p><img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/3.png" /> (could also be 2 in the denominator)</p>
+
+<h4>In a neural network</h4>
+
+<p><img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/4.png" /></p>
+
+<p><img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/5.png" /></p>
+
+<p>this matrix norm is called the &quot;Frobenius norm&quot;, also referred to as <img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/11.png" /></p>
+
+<p>How does backpropagation change now?
+Whichever expression you have from the backpropagation, and add <img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/12.png" />.
+So,</p>
+
+<p><img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/6.png" /> </p>
+
+<p>Afterwards, <img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/13.png" /></p>
+
+<p>L2-regularization is called weight decay, because regularization will make your load smaller:</p>
+
+<p><img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/7.png" /></p>
+
+<p><img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/8.png" /></p>
+
+<p>hence your weights will become smaller by a factor <img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/14.png" />.</p>
+
+<p>Intuition for regularization: the weight matrices will be penalized from being too large. Actually, the network will be forced to almost be simplified.
+Also: e.g., <em>tanh</em> function, if <img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/assets/15.png" /> small, the activation function will be mostly operating in the linear region and not &quot;explode&quot; as easily.</p>
+
+<h2>Dropout Regularization</h2>
+
+<p>When you apply the Dropout technique, a random subset of nodes (also called the units) in a layer are ignored (their weights set to zero) during each phase of training. Below is an image from the <a href="http://www.jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf">original paper</a> that introduced this technique. </p>
+
+<p>On the left you can see a standard neural network with four layers (one input layer, two hidden layers, and an output layer). On the right, you can see the network after Dropout is applied during one step of training. This technique is very effective because it allows us to train neural networks on different parts of the data, thus ensuring that our model is not overly sensitive noise in the data. </p>
+
+<p><img src="https://raw.githubusercontent.com/learn-co-curriculum/test-dsc-tuning-neural-networks-with-regularization/master/images/dropout.png" alt="title">  </p>
+
+<p>In Keras, you specify <em>Dropout</em> using the <code>Dropout</code> layer, which is applied to input and hidden layers. The <code>Dropout</code> layers requires one argument, <code>rate</code>, which specifies the fraction of units to drop, usually between 0.2 and 0.5. </p>
+
+<pre><code class="python">model = models.Sequential()
+model.add(layers.Dense(5, activation=&#39;relu&#39;, input_shape=(500,)))
+# Dropout applied to the input layer
+model.add(layers.Dropout(0.3))
+model.add(layers.Dense(5, activation=&#39;relu&#39;))
+# Dropout applied to the hidden layer
+model.add(layers.Dropout(0.3))
+model.add(layers.Dense(1, activation=&#39;sigmoid&#39;))
+</code></pre>
+
+<p>In different iterations through the training set, different nodes will be zeroed out!</p>
+
+<h2>Summary</h2>
+
+<p>In this lesson you began to explore how to further tune and optimize out of the box neural networks built with Keras. This included regularization analogous to previous machine learning work you&#39;ve seen, as well dropout regularization, which can be used to further prune your networks. In the upcoming lab you&#39;ll get a chance to experiment with these concepts in practice and observe their effect on your models outputs. </p>

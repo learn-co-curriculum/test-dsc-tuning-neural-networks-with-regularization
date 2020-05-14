@@ -1,0 +1,1 @@
+gem 'latex_to_svg', github: 'Prepsmith/latex_to_svg'

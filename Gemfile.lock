@@ -1,0 +1,17 @@
+GIT
+  remote: https://github.com/Prepsmith/latex_to_svg.git
+  revision: a09db371c17b87fab16ffe119228756b25a00f5f
+  specs:
+    latex_to_svg (0.1.0)
+
+GEM
+  specs:
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  latex_to_svg!
+
+BUNDLED WITH
+   2.1.4
